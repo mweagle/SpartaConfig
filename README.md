@@ -1,2 +1,2 @@
-# SpartaHelloWorld
-Sparta-based application of Hello World
+# SpartaConfig
+Sparta-based application that uses `--tags` to define different lambda environments.
