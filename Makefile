@@ -27,10 +27,10 @@ provision-default: generate vet
 	go run main.go provision --level info --s3Bucket $(S3_BUCKET) --noop
 
 provision-staging: generate vet
-	go run main.go provision --level info --s3Bucket $(S3_BUCKET) --noop --tags staging
+	go run main.go provision --level info --s3Bucket $(S3_BUCKET) --tags staging --noop
 
 provision-production: generate vet
-	go run main.go provision --level info --s3Bucket $(S3_BUCKET) --noop --tags production
+	go run main.go provision --level info --s3Bucket $(S3_BUCKET) --tags production --noop
 
 describe-staging: generate vet
 	go run main.go --level info describe --out ./graph.html --tags staging

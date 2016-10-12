@@ -39,8 +39,8 @@ func main() {
 		ServiceDecorator: environments.ServiceDecoratorHook(sparta.OptionsGlobal.BuildTags),
 	}
 
-	err := sparta.MainEx(fmt.Sprintf("SpartaHelloWorld-%s", sparta.OptionsGlobal.BuildTags),
-		fmt.Sprintf("Test HelloWorld resource command"),
+	err := sparta.MainEx(fmt.Sprintf("SpartaConfig-%s", sparta.OptionsGlobal.BuildTags),
+		fmt.Sprintf("Test SpartaConfig environments"),
 		lambdaFunctions,
 		nil,
 		nil,
