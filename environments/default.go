@@ -4,15 +4,18 @@ package environments
 
 import (
 	"fmt"
+
 	"github.com/Sirupsen/logrus"
 	"github.com/aws/aws-sdk-go/aws/session"
-	gocf "github.com/crewjam/go-cloudformation"
+	gocf "github.com/mweagle/go-cloudformation"
 	sparta "github.com/mweagle/Sparta"
 )
 
 // Name is the default configuration
 const Name = ""
 
+// ServiceDecoratorHook returns a service decorator hook with the supplied
+// tags
 func ServiceDecoratorHook(buildTags string) sparta.ServiceDecoratorHook {
 	return func(context map[string]interface{},
 		serviceName string,
