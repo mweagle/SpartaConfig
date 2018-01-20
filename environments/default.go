@@ -1,22 +1,16 @@
-// +build !staging,!production
-
 package environments
 
 import (
-	"fmt"
-
-	"github.com/Sirupsen/logrus"
 	"github.com/aws/aws-sdk-go/aws/session"
-	gocf "github.com/mweagle/go-cloudformation"
 	sparta "github.com/mweagle/Sparta"
+	"github.com/mweagle/SpartaConfig/environments/targets"
+	gocf "github.com/mweagle/go-cloudformation"
+	"github.com/sirupsen/logrus"
 )
-
-// Name is the default configuration
-const Name = ""
 
 // ServiceDecoratorHook returns a service decorator hook with the supplied
 // tags
-func ServiceDecoratorHook(buildTags string) sparta.ServiceDecoratorHook {
+func ServiceDecoratorHook() sparta.ServiceDecoratorHookFunc {
 	return func(context map[string]interface{},
 		serviceName string,
 		template *gocf.Template,
@@ -25,8 +19,9 @@ func ServiceDecoratorHook(buildTags string) sparta.ServiceDecoratorHook {
 		awsSession *session.Session,
 		noop bool,
 		logger *logrus.Logger) error {
-		if len(buildTags) <= 0 {
-			return fmt.Errorf("Please provide a --tags value for environment target")
+		template.Outputs["Environment"] = &gocf.Output{
+			Description: "Sparta Config target environment",
+			Value:       targets.Name,
 		}
 		return nil
 	}

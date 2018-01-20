@@ -1,50 +1,42 @@
 package main
 
 import (
-	"encoding/json"
+	"context"
 	"fmt"
-	"net/http"
 	"os"
 
-	"github.com/Sirupsen/logrus"
 	sparta "github.com/mweagle/Sparta"
 	environments "github.com/mweagle/SpartaConfig/environments"
+	"github.com/mweagle/SpartaConfig/environments/targets"
 )
 
 // Standard AWS λ function
-func helloWorld(event *json.RawMessage,
-	context *sparta.LambdaContext,
-	w http.ResponseWriter,
-	logger *logrus.Logger) {
-
-	fmt.Fprintf(w, "Hello %s", environments.Name)
+func helloWorld(ctx context.Context) (string, error) {
+	return fmt.Sprintf("Hello %s", targets.Name), nil
 }
 
 ////////////////////////////////////////////////////////////////////////////////
 // Main
 func main() {
-	parseErrors := sparta.ParseOptions(nil)
-	if nil != parseErrors {
-		os.Exit(2)
-	}
-
-	lambdaFn := sparta.NewLambda(sparta.IAMRoleDefinition{},
+	lambdaFn := sparta.HandleAWSLambda("spartaConfig",
 		helloWorld,
-		nil)
+		sparta.IAMRoleDefinition{})
 	var lambdaFunctions []*sparta.LambdaAWSInfo
 	lambdaFunctions = append(lambdaFunctions, lambdaFn)
 
-	hooks := &sparta.WorkflowHooks{
-		Context:          map[string]interface{}{},
-		ServiceDecorator: environments.ServiceDecoratorHook(sparta.OptionsGlobal.BuildTags),
+	workflowHooks := &sparta.WorkflowHooks{
+		ServiceDecorators: []sparta.ServiceDecoratorHookHandler{
+			environments.ServiceDecoratorHook(),
+		},
 	}
 
-	err := sparta.MainEx(fmt.Sprintf("SpartaConfig-%s", sparta.OptionsGlobal.BuildTags),
+	err := sparta.MainEx("SpartaConfig",
 		fmt.Sprintf("Test SpartaConfig environments"),
 		lambdaFunctions,
 		nil,
 		nil,
-		hooks)
+		workflowHooks,
+		false)
 	if err != nil {
 		os.Exit(1)
 	}
