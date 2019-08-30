@@ -15,6 +15,7 @@ func ServiceDecoratorHook() sparta.ServiceDecoratorHookFunc {
 		serviceName string,
 		template *gocf.Template,
 		S3Bucket string,
+		S3Key string,
 		buildID string,
 		awsSession *session.Session,
 		noop bool,

@@ -18,7 +18,7 @@ func helloWorld(ctx context.Context) (string, error) {
 ////////////////////////////////////////////////////////////////////////////////
 // Main
 func main() {
-	lambdaFn := sparta.HandleAWSLambda("spartaConfig",
+	lambdaFn, _ := sparta.NewAWSLambda("spartaConfig",
 		helloWorld,
 		sparta.IAMRoleDefinition{})
 	var lambdaFunctions []*sparta.LambdaAWSInfo
